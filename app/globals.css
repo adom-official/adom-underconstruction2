@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  height: 100%;
+  background-color: #07060b;
+}
+
+body {
+  color: #f4f1ea;
+  overflow-x: hidden;
+}
+
+::selection {
+  background-color: rgba(201, 164, 103, 0.35);
+  color: #f4f1ea;
+}
+
+/* Focus rõ ràng cho điều hướng bằng bàn phím */
+:focus-visible {
+  outline: 2px solid rgba(228, 197, 139, 0.8);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Thanh cuộn tối giản, đồng bộ theme */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #07060b;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(201, 164, 103, 0.35);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(201, 164, 103, 0.55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

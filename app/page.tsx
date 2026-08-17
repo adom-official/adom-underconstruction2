@@ -1,0 +1,175 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import StarField from "@/components/StarField";
+import NebulaParallax from "@/components/NebulaParallax";
+import ConstellationMark from "@/components/ConstellationMark";
+import WaitlistForm from "@/components/WaitlistForm";
+import { contactInfo, siteConfig } from "@/lib/constants";
+
+const containerVariants = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.14, delayChildren: 0.1 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 18 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
+export default function Home() {
+  const heroRef = useRef<HTMLDivElement | null>(null);
+  const tiltX = useMotionValue(0);
+  const tiltY = useMotionValue(0);
+  const springTiltX = useSpring(tiltX, { stiffness: 120, damping: 18 });
+  const springTiltY = useSpring(tiltY, { stiffness: 120, damping: 18 });
+  const rotateX = useTransform(springTiltY, [-1, 1], [4, -4]);
+  const rotateY = useTransform(springTiltX, [-1, 1], [-4, 4]);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (prefersReducedMotion) return;
+
+    function handleMove(e: PointerEvent) {
+      const el = heroRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+      tiltX.set(Math.max(-1, Math.min(1, nx)));
+      tiltY.set(Math.max(-1, Math.min(1, ny)));
+    }
+    window.addEventListener("pointermove", handleMove);
+    return () => window.removeEventListener("pointermove", handleMove);
+  }, [tiltX, tiltY]);
+
+  return (
+    <main className="relative min-h-screen bg-void">
+      <StarField />
+      <NebulaParallax />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 z-[1] bg-radial-fade"
+      />
+
+      <div className="relative z-10 flex min-h-screen flex-col px-6 py-8 sm:px-10 sm:py-10">
+        {/* Header */}
+        <motion.header
+          initial={{ opacity: 0, y: -12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="flex items-center justify-between"
+        >
+          <span className="font-display text-xl italic tracking-wide text-stardust sm:text-2xl">
+            {siteConfig.name}
+          </span>
+          <span className="hidden font-mono text-[11px] uppercase tracking-widest2 text-stardust-faint sm:inline">
+            Brand Strategy &amp; Design
+          </span>
+        </motion.header>
+
+        {/* Hero */}
+        <motion.div
+          ref={heroRef}
+          style={{ rotateX, rotateY, transformPerspective: 1000 }}
+          className="flex flex-1 flex-col items-center justify-center py-16 text-center"
+        >
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="show"
+            className="flex flex-col items-center"
+          >
+            <motion.span
+              variants={itemVariants}
+              className="font-mono text-xs uppercase tracking-widest2 text-aurum"
+            >
+              Đang kiến tạo
+            </motion.span>
+
+            <motion.div variants={itemVariants} className="mt-2">
+              <ConstellationMark />
+            </motion.div>
+
+            <motion.h1
+              variants={itemVariants}
+              className="mt-2 max-w-3xl font-display text-4xl italic leading-[1.15] text-stardust sm:text-5xl md:text-6xl"
+            >
+              Một vũ trụ thương hiệu mới
+              <br className="hidden sm:block" /> đang thành hình.
+            </motion.h1>
+
+            <motion.p
+              variants={itemVariants}
+              className="mt-6 max-w-xl text-balance font-body text-base leading-relaxed text-stardust-dim sm:text-lg"
+            >
+              ADOM đang xây dựng một không gian mới để kể câu chuyện thương
+              hiệu bằng chiến lược và thiết kế. Chúng tôi sẽ sớm trở lại —
+              trọn vẹn và ấn tượng hơn. Hẹn gặp lại bạn sau ít lâu nữa.
+            </motion.p>
+
+            <motion.div variants={itemVariants} className="mt-10 w-full max-w-md">
+              <p className="mb-3 font-mono text-[11px] uppercase tracking-widest2 text-stardust-faint">
+                Nhận thông báo ngay khi ra mắt
+              </p>
+              <WaitlistForm />
+            </motion.div>
+          </motion.div>
+        </motion.div>
+
+        {/* Footer / Liên hệ */}
+        <motion.footer
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+          className="flex flex-col items-center gap-4 border-t border-stardust/10 pt-6 text-center sm:flex-row sm:justify-between sm:text-left"
+        >
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-6">
+            <a
+              href={`mailto:${contactInfo.email}`}
+              className="font-body text-sm text-stardust-dim transition-colors hover:text-aurum-bright"
+            >
+              {contactInfo.email}
+            </a>
+            <a
+              href={`tel:${contactInfo.phone.replace(/\s|\(|\)/g, "")}`}
+              className="font-body text-sm text-stardust-dim transition-colors hover:text-aurum-bright"
+            >
+              {contactInfo.phone}
+            </a>
+            <span className="font-body text-sm text-stardust-faint">
+              {contactInfo.address}
+            </span>
+          </div>
+
+          <div className="flex items-center justify-center gap-5">
+            {contactInfo.socials.map((social) => (
+              <a
+                key={social.label}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-mono text-xs uppercase tracking-wide text-stardust-faint transition-colors hover:text-aurum-bright"
+              >
+                {social.label}
+              </a>
+            ))}
+          </div>
+        </motion.footer>
+
+        <p className="mt-4 text-center font-mono text-[10px] tracking-wide text-stardust-faint/70 sm:text-left">
+          © {new Date().getFullYear()} {siteConfig.name} — {siteConfig.legalName}. All rights reserved.
+        </p>
+      </div>
+    </main>
+  );
+}
