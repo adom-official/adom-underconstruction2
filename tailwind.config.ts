@@ -52,11 +52,32 @@ const config: Config = {
           from: { transform: "rotate(0deg)" },
           to: { transform: "rotate(360deg)" },
         },
+        "float-slow": {
+          "0%, 100%": { transform: "translate(0px, 0px)" },
+          "50%": { transform: "translate(10px, -22px)" },
+        },
+        "float-med": {
+          "0%, 100%": { transform: "translate(0px, 0px) rotate(0deg)" },
+          "50%": { transform: "translate(-14px, 16px) rotate(4deg)" },
+        },
+        "float-fast": {
+          "0%, 100%": { transform: "translate(0px, 0px)" },
+          "50%": { transform: "translate(8px, 12px)" },
+        },
+        "sweep": {
+          "0%": { transform: "translate3d(-45vw, -10vh, 0) rotate(18deg)" },
+          "50%": { transform: "translate3d(45vw, 10vh, 0) rotate(18deg)" },
+          "100%": { transform: "translate3d(-45vw, -10vh, 0) rotate(18deg)" },
+        },
       },
       animation: {
         twinkle: "twinkle 4s ease-in-out infinite",
         drift: "drift 8s ease-in-out infinite",
         "spin-slow": "spin-slow 90s linear infinite",
+        "float-slow": "float-slow 13s ease-in-out infinite",
+        "float-med": "float-med 9s ease-in-out infinite",
+        "float-fast": "float-fast 6s ease-in-out infinite",
+        sweep: "sweep 16s ease-in-out infinite",
       },
     },
   },

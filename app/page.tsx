@@ -1,11 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import StarField from "@/components/StarField";
-import NebulaParallax from "@/components/NebulaParallax";
-import ConstellationMark from "@/components/ConstellationMark";
+import GeometricField from "@/components/GeometricField";
 import WaitlistForm from "@/components/WaitlistForm";
+import { motion } from "framer-motion";
 import { contactInfo, siteConfig } from "@/lib/constants";
 
 const containerVariants = {
@@ -25,40 +23,17 @@ const itemVariants = {
 };
 
 export default function Home() {
-  const heroRef = useRef<HTMLDivElement | null>(null);
-  const tiltX = useMotionValue(0);
-  const tiltY = useMotionValue(0);
-  const springTiltX = useSpring(tiltX, { stiffness: 120, damping: 18 });
-  const springTiltY = useSpring(tiltY, { stiffness: 120, damping: 18 });
-  const rotateX = useTransform(springTiltY, [-1, 1], [4, -4]);
-  const rotateY = useTransform(springTiltX, [-1, 1], [-4, 4]);
-
-  useEffect(() => {
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    if (prefersReducedMotion) return;
-
-    function handleMove(e: PointerEvent) {
-      const el = heroRef.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;
-      tiltX.set(Math.max(-1, Math.min(1, nx)));
-      tiltY.set(Math.max(-1, Math.min(1, ny)));
-    }
-    window.addEventListener("pointermove", handleMove);
-    return () => window.removeEventListener("pointermove", handleMove);
-  }, [tiltX, tiltY]);
-
   return (
     <main className="relative min-h-screen bg-void">
       <StarField />
-      <NebulaParallax />
+      <GeometricField />
       <div
         aria-hidden="true"
-        className="pointer-events-none fixed inset-0 z-[1] bg-radial-fade"
+        className="pointer-events-none fixed inset-0 z-[2]"
+        style={{
+          background:
+            "radial-gradient(ellipse 60% 55% at 50% 46%, rgba(5,4,8,0.7) 0%, rgba(5,4,8,0.35) 45%, transparent 72%)",
+        }}
       />
 
       <div className="relative z-10 flex min-h-screen flex-col px-6 py-8 sm:px-10 sm:py-10">
@@ -78,11 +53,7 @@ export default function Home() {
         </motion.header>
 
         {/* Hero */}
-        <motion.div
-          ref={heroRef}
-          style={{ rotateX, rotateY, transformPerspective: 1000 }}
-          className="flex flex-1 flex-col items-center justify-center py-16 text-center"
-        >
+        <div className="flex flex-1 flex-col items-center justify-center py-16 text-center">
           <motion.div
             variants={containerVariants}
             initial="hidden"
@@ -96,13 +67,9 @@ export default function Home() {
               Đang kiến tạo
             </motion.span>
 
-            <motion.div variants={itemVariants} className="mt-2">
-              <ConstellationMark />
-            </motion.div>
-
             <motion.h1
               variants={itemVariants}
-              className="mt-2 max-w-3xl font-display text-4xl italic leading-[1.15] text-stardust sm:text-5xl md:text-6xl"
+              className="mt-6 max-w-3xl font-display text-4xl italic leading-[1.15] text-stardust sm:text-5xl md:text-6xl"
             >
               Một vũ trụ thương hiệu mới
               <br className="hidden sm:block" /> đang thành hình.
@@ -124,7 +91,7 @@ export default function Home() {
               <WaitlistForm />
             </motion.div>
           </motion.div>
-        </motion.div>
+        </div>
 
         {/* Footer / Liên hệ */}
         <motion.footer
