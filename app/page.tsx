@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import BackgroundImage from "@/components/BackgroundImage";
 import StarField from "@/components/StarField";
 import GeometricField from "@/components/GeometricField";
 import WaitlistForm from "@/components/WaitlistForm";
@@ -27,12 +26,11 @@ const itemVariants = {
 export default function Home() {
   return (
     <main className="relative min-h-screen bg-void">
-      <BackgroundImage />
       <StarField />
       <GeometricField />
       <div
         aria-hidden="true"
-        className="pointer-events-none fixed inset-0 z-[3]"
+        className="pointer-events-none fixed inset-0 z-[2]"
         style={{
           background:
             "radial-gradient(ellipse 60% 55% at 50% 46%, rgba(5,4,8,0.7) 0%, rgba(5,4,8,0.35) 45%, transparent 72%)",

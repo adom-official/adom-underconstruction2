@@ -22,15 +22,19 @@ import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } fro
  * sáng cộng dồn và bừng nhẹ.
  */
 
+type ShapeKind = "circle" | "square" | "triangle" | "glyph" | "wave" | "ring";
+
 type Shape = {
-  kind: "circle" | "square" | "triangle";
+  kind: ShapeKind;
   size: string;
   style: React.CSSProperties;
-  gradient: string;
+  gradient: string; // với "glyph"/"wave"/"ring": dùng làm màu solid (stroke/text color)
   blur: number;
   opacity: number;
   rotate?: number;
   floatClass?: string;
+  glyphChar?: "+" | "-" | "×" | "\\"; // chỉ dùng khi kind === "glyph"
+  strokeWidth?: number; // dùng cho "wave" và "ring"
 };
 
 type DriftShape = {
@@ -390,31 +394,192 @@ const driftShapes: DriftShape[] = [
   },
 ];
 
-// Tiền cảnh — 1-2 khối siêu to đặt ở góc màn hình, blur rất đậm để không che
-// nội dung, tương tác mạnh nhất với con trỏ (gần nhất, nên di chuyển nhiều nhất).
-const foregroundShapes: Shape[] = [
-  {
-    kind: "circle",
-    size: "clamp(900px, 92vw, 1500px)",
-    style: { top: "-42%", left: "-34%" },
-    gradient: "radial-gradient(circle at 38% 38%, #4A4A4A 0%, #1C1C1C 50%, transparent 76%)",
-    blur: 190,
-    opacity: 0.42,
-  },
-  {
-    kind: "circle",
-    size: "clamp(820px, 84vw, 1360px)",
-    style: { bottom: "-40%", right: "-32%" },
-    gradient:
-      "radial-gradient(circle at 35% 35%, #A6CE39 0%, #3A3A3A 26%, #1C1C1C 55%, transparent 78%)",
-    blur: 180,
-    opacity: 0.36,
-  },
+// --- Bộ sinh số ngẫu nhiên có seed cố định --------------------------------
+// Dùng seed cố định để kết quả giống hệt nhau giữa server và client (tránh
+// lỗi hydration mismatch của Next.js nếu dùng Math.random() trực tiếp).
+function mulberry32(seed: number) {
+  let a = seed;
+  return function () {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const rand = mulberry32(1337);
+function pick<T>(arr: T[]): T {
+  return arr[Math.floor(rand() * arr.length)];
+}
+function between(min: number, max: number) {
+  return min + rand() * (max - min);
+}
+
+const grayGreenPalette = [
+  "#8C8C8C",
+  "#4A4A4A",
+  "#6C6C69",
+  "#F2F2EF",
+  "#8C8C8C",
+  "#4A4A4A",
+  "#A6CE39", // ~1/6 xác suất rơi vào xanh — giữ đúng vai trò "điểm nhấn"
 ];
 
+// Dải DOF theo từng tầng (size / blur / floatClass tương ứng độ sâu)
+const dofTiers = [
+  { size: [46, 90], blur: [45, 85], floatClass: "animate-float-slow" }, // xa
+  { size: [30, 54], blur: [16, 34], floatClass: "animate-float-slow" }, // xa-vừa
+  { size: [18, 32], blur: [3, 9], floatClass: "animate-float-med" }, // gần-vừa
+  { size: [10, 20], blur: [1, 4], floatClass: "animate-float-fast" }, // gần
+];
+
+function randomPositionStyle(): React.CSSProperties {
+  const useTop = rand() > 0.5;
+  const useLeft = rand() > 0.5;
+  const vertical = between(4, 90);
+  const horizontal = between(2, 92);
+  return {
+    [useTop ? "top" : "bottom"]: `${vertical.toFixed(1)}%`,
+    [useLeft ? "left" : "right"]: `${horizontal.toFixed(1)}%`,
+  } as React.CSSProperties;
+}
+
+// 20 object dấu +, -, ×, \ — kích thước/độ mờ/tầng DOF ngẫu nhiên (seed cố định)
+const glyphChars: Array<"+" | "-" | "×" | "\\"> = ["+", "-", "×", "\\"];
+const glyphShapes: Shape[] = Array.from({ length: 20 }, () => {
+  const tier = pick(dofTiers);
+  return {
+    kind: "glyph",
+    size: `${between(tier.size[0], tier.size[1]).toFixed(0)}px`,
+    style: randomPositionStyle(),
+    gradient: pick(grayGreenPalette),
+    blur: Number(between(tier.blur[0], tier.blur[1]).toFixed(1)),
+    opacity: Number(between(0.35, 0.8).toFixed(2)),
+    rotate: Number(between(-30, 30).toFixed(0)),
+    floatClass: tier.floatClass,
+    glyphChar: pick(glyphChars),
+  };
+});
+
+// 6 object hình lượn sóng ngắn — tầng DOF ngẫu nhiên
+const waveShapes: Shape[] = Array.from({ length: 6 }, () => {
+  const tier = pick(dofTiers);
+  const size = between(tier.size[0] * 1.6, tier.size[1] * 1.6);
+  return {
+    kind: "wave",
+    size: `${size.toFixed(0)}px`,
+    style: randomPositionStyle(),
+    gradient: pick(grayGreenPalette),
+    blur: Number(between(tier.blur[0] * 0.5, tier.blur[1] * 0.5).toFixed(1)),
+    opacity: Number(between(0.4, 0.75).toFixed(2)),
+    rotate: Number(between(-20, 20).toFixed(0)),
+    floatClass: tier.floatClass,
+    strokeWidth: Number(between(1.5, 3).toFixed(1)),
+  };
+});
+
+// 6 object hình tròn rỗng, chỉ có viền (stroke) — tầng DOF ngẫu nhiên
+const ringShapes: Shape[] = Array.from({ length: 6 }, () => {
+  const tier = pick(dofTiers);
+  return {
+    kind: "ring",
+    size: `${between(tier.size[0] * 1.3, tier.size[1] * 1.3).toFixed(0)}px`,
+    style: randomPositionStyle(),
+    gradient: pick(grayGreenPalette),
+    blur: Number(between(tier.blur[0] * 0.4, tier.blur[1] * 0.4).toFixed(1)),
+    opacity: Number(between(0.35, 0.7).toFixed(2)),
+    floatClass: tier.floatClass,
+    strokeWidth: Number(between(1.5, 2.5).toFixed(1)),
+  };
+});
+
+// Gộp toàn bộ object mới, chia đều ngẫu nhiên vào 4 layer DOF hiện có
+const extraShapes = [...glyphShapes, ...waveShapes, ...ringShapes];
+const extraFar: Shape[] = [];
+const extraMidFar: Shape[] = [];
+const extraMidNear: Shape[] = [];
+const extraNear: Shape[] = [];
+extraShapes.forEach((s, i) => {
+  const bucket = i % 4;
+  if (bucket === 0) extraFar.push(s);
+  else if (bucket === 1) extraMidFar.push(s);
+  else if (bucket === 2) extraMidNear.push(s);
+  else extraNear.push(s);
+});
+
 function ShapeEl({ shape }: { shape: Shape }) {
+  const commonPosition: React.CSSProperties = { position: "absolute", ...shape.style };
+
+  if (shape.kind === "glyph") {
+    return (
+      <div
+        className={shape.floatClass}
+        style={{
+          ...commonPosition,
+          fontSize: shape.size,
+          lineHeight: 1,
+          fontWeight: 600,
+          color: shape.gradient,
+          opacity: shape.opacity,
+          filter: `blur(${shape.blur}px)`,
+          transform: shape.rotate ? `rotate(${shape.rotate}deg)` : undefined,
+          mixBlendMode: "plus-lighter",
+          fontFamily: "var(--font-mono)",
+          userSelect: "none",
+        }}
+      >
+        {shape.glyphChar}
+      </div>
+    );
+  }
+
+  if (shape.kind === "wave") {
+    return (
+      <svg
+        className={shape.floatClass}
+        style={{
+          ...commonPosition,
+          width: shape.size,
+          height: shape.size,
+          opacity: shape.opacity,
+          filter: `blur(${shape.blur}px)`,
+          transform: shape.rotate ? `rotate(${shape.rotate}deg)` : undefined,
+          mixBlendMode: "plus-lighter",
+          overflow: "visible",
+        }}
+        viewBox="0 0 60 20"
+      >
+        <path
+          d="M0,10 C6,0 14,0 20,10 C26,20 34,20 40,10 C46,0 54,0 60,10"
+          fill="none"
+          stroke={shape.gradient}
+          strokeWidth={shape.strokeWidth ?? 2.5}
+          strokeLinecap="round"
+        />
+      </svg>
+    );
+  }
+
+  if (shape.kind === "ring") {
+    return (
+      <div
+        className={shape.floatClass}
+        style={{
+          ...commonPosition,
+          width: shape.size,
+          height: shape.size,
+          borderRadius: "9999px",
+          border: `${shape.strokeWidth ?? 2}px solid ${shape.gradient}`,
+          opacity: shape.opacity,
+          filter: `blur(${shape.blur}px)`,
+          mixBlendMode: "plus-lighter",
+        }}
+      />
+    );
+  }
+
   const base: React.CSSProperties = {
-    position: "absolute",
+    ...commonPosition,
     width: shape.size,
     height: shape.size,
     background: shape.gradient,
@@ -422,7 +587,6 @@ function ShapeEl({ shape }: { shape: Shape }) {
     filter: `blur(${shape.blur}px)`,
     transform: shape.rotate ? `rotate(${shape.rotate}deg)` : undefined,
     mixBlendMode: "plus-lighter",
-    ...shape.style,
   };
 
   if (shape.kind === "circle") base.borderRadius = "9999px";
@@ -476,9 +640,6 @@ export default function GeometricField() {
   const midNearY = useTransform(smoothY, [-1, 1], [-36, 36]);
   const nearX = useTransform(smoothX, [-1, 1], [-84, 84]);
   const nearY = useTransform(smoothY, [-1, 1], [-60, 60]);
-  // Tiền cảnh: gần nhất, tương tác mạnh nhất với con trỏ
-  const fgX = useTransform(smoothX, [-1, 1], [-150, 150]);
-  const fgY = useTransform(smoothY, [-1, 1], [-110, 110]);
 
   useEffect(() => {
     if (prefersReducedMotion) return;
@@ -494,10 +655,13 @@ export default function GeometricField() {
     "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E";
 
   return (
-    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[2] overflow-hidden">
+    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1] overflow-hidden">
       <motion.div style={{ x: farX, y: farY }} className="absolute inset-0">
         {farShapes.map((s, i) => (
           <ShapeEl key={`far-${i}`} shape={s} />
+        ))}
+        {extraFar.map((s, i) => (
+          <ShapeEl key={`extra-far-${i}`} shape={s} />
         ))}
       </motion.div>
 
@@ -505,17 +669,26 @@ export default function GeometricField() {
         {midFarShapes.map((s, i) => (
           <ShapeEl key={`midfar-${i}`} shape={s} />
         ))}
+        {extraMidFar.map((s, i) => (
+          <ShapeEl key={`extra-midfar-${i}`} shape={s} />
+        ))}
       </motion.div>
 
       <motion.div style={{ x: midNearX, y: midNearY }} className="absolute inset-0">
         {midNearShapes.map((s, i) => (
           <ShapeEl key={`midnear-${i}`} shape={s} />
         ))}
+        {extraMidNear.map((s, i) => (
+          <ShapeEl key={`extra-midnear-${i}`} shape={s} />
+        ))}
       </motion.div>
 
       <motion.div style={{ x: nearX, y: nearY }} className="absolute inset-0">
         {nearShapes.map((s, i) => (
           <ShapeEl key={`near-${i}`} shape={s} />
+        ))}
+        {extraNear.map((s, i) => (
+          <ShapeEl key={`extra-near-${i}`} shape={s} />
         ))}
       </motion.div>
 
@@ -525,13 +698,6 @@ export default function GeometricField() {
           <DriftEl key={`drift-${i}`} shape={s} reduced={!!prefersReducedMotion} />
         ))}
       </div>
-
-      {/* Tiền cảnh — khối siêu to ở góc màn hình, blur đậm, tương tác mạnh nhất */}
-      <motion.div style={{ x: fgX, y: fgY }} className="absolute inset-0">
-        {foregroundShapes.map((s, i) => (
-          <ShapeEl key={`fg-${i}`} shape={s} />
-        ))}
-      </motion.div>
 
       {/* Grain — chất liệu poster in, phủ rất nhẹ */}
       <div

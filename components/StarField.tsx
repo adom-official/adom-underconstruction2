@@ -98,7 +98,7 @@ export default function StarField() {
             (0.65 + 0.35 * Math.sin(time * star.twinkleSpeed + star.twinklePhase));
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(244, 241, 234, ${twinkle.toFixed(3)})`;
+        ctx.fillStyle = `rgba(255, 255, 255, ${twinkle.toFixed(3)})`;
         ctx.fill();
       }
 
@@ -119,8 +119,8 @@ export default function StarField() {
           const tailY = s.y - Math.sin(s.angle) * s.length;
 
           const gradient = ctx.createLinearGradient(s.x, s.y, tailX, tailY);
-          gradient.addColorStop(0, `rgba(199, 229, 111, ${fade})`);
-          gradient.addColorStop(1, "rgba(199, 229, 111, 0)");
+          gradient.addColorStop(0, `rgba(255, 255, 255, ${fade})`);
+          gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
 
           ctx.beginPath();
           ctx.strokeStyle = gradient;
@@ -162,7 +162,7 @@ export default function StarField() {
     <canvas
       ref={canvasRef}
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-[1] h-full w-full"
+      className="pointer-events-none fixed inset-0 z-0 h-full w-full"
     />
   );
 }
