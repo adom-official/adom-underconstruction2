@@ -6,24 +6,25 @@ const config: Config = {
     extend: {
       colors: {
         void: {
-          DEFAULT: "#07060B",
-          deep: "#050408",
-          raised: "#0F0D18",
+          DEFAULT: "#0A0A0B",
+          deep: "#050505",
+          raised: "#161616",
         },
-        nebula: {
-          DEFAULT: "#4B3A86",
-          soft: "#6B4FA0",
-          glow: "#8A6FD6",
+        brand: {
+          DEFAULT: "#A6CE39",
+          bright: "#C7E56F",
+          dim: "#6E8A26",
+          deep: "#465A18",
         },
-        aurum: {
-          DEFAULT: "#C9A467",
-          bright: "#E4C58B",
-          dim: "#8A703F",
+        graphite: {
+          DEFAULT: "#4A4A4A",
+          light: "#8C8C8C",
+          dark: "#1C1C1C",
         },
         stardust: {
-          DEFAULT: "#F4F1EA",
-          dim: "#B9B5C4",
-          faint: "#6E6A7C",
+          DEFAULT: "#F2F2EF",
+          dim: "#B4B4B0",
+          faint: "#6C6C69",
         },
       },
       fontFamily: {
@@ -33,10 +34,6 @@ const config: Config = {
       },
       letterSpacing: {
         widest2: "0.35em",
-      },
-      backgroundImage: {
-        "radial-fade":
-          "radial-gradient(circle at 50% 30%, rgba(138,111,214,0.16) 0%, rgba(7,6,11,0) 60%)",
       },
       keyframes: {
         "twinkle": {

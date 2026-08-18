@@ -62,7 +62,7 @@ export default function Home() {
           >
             <motion.span
               variants={itemVariants}
-              className="font-mono text-xs uppercase tracking-widest2 text-aurum"
+              className="font-mono text-xs uppercase tracking-widest2 text-brand"
             >
               Đang kiến tạo
             </motion.span>
@@ -103,13 +103,13 @@ export default function Home() {
           <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-6">
             <a
               href={`mailto:${contactInfo.email}`}
-              className="font-body text-sm text-stardust-dim transition-colors hover:text-aurum-bright"
+              className="font-body text-sm text-stardust-dim transition-colors hover:text-brand-bright"
             >
               {contactInfo.email}
             </a>
             <a
               href={`tel:${contactInfo.phone.replace(/\s|\(|\)/g, "")}`}
-              className="font-body text-sm text-stardust-dim transition-colors hover:text-aurum-bright"
+              className="font-body text-sm text-stardust-dim transition-colors hover:text-brand-bright"
             >
               {contactInfo.phone}
             </a>
@@ -125,7 +125,7 @@ export default function Home() {
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-mono text-xs uppercase tracking-wide text-stardust-faint transition-colors hover:text-aurum-bright"
+                className="font-mono text-xs uppercase tracking-wide text-stardust-faint transition-colors hover:text-brand-bright"
               >
                 {social.label}
               </a>

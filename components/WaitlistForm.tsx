@@ -58,7 +58,7 @@ export default function WaitlistForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           disabled={status === "loading" || status === "success"}
-          className="w-full flex-1 rounded-full border border-stardust/15 bg-void-raised/60 px-5 py-3 text-sm text-stardust placeholder:text-stardust-faint focus:border-aurum/50 focus:outline-none focus:ring-1 focus:ring-aurum/40 disabled:opacity-60"
+          className="w-full flex-1 rounded-full border border-stardust/15 bg-void-raised/60 px-5 py-3 text-sm text-stardust placeholder:text-stardust-faint focus:border-brand/50 focus:outline-none focus:ring-1 focus:ring-brand/40 disabled:opacity-60"
           aria-invalid={status === "error"}
           aria-describedby="waitlist-message"
         />
@@ -67,7 +67,7 @@ export default function WaitlistForm() {
           disabled={status === "loading" || status === "success"}
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
-          className="shrink-0 rounded-full bg-aurum px-6 py-3 text-sm font-medium tracking-wide text-void transition-colors hover:bg-aurum-bright disabled:cursor-not-allowed disabled:opacity-70"
+          className="shrink-0 rounded-full bg-brand px-6 py-3 text-sm font-medium tracking-wide text-void transition-colors hover:bg-brand-bright disabled:cursor-not-allowed disabled:opacity-70"
         >
           {status === "loading"
             ? "Đang gửi..."
@@ -82,7 +82,7 @@ export default function WaitlistForm() {
         role="status"
         aria-live="polite"
         className={`mt-3 min-h-[1.25rem] text-sm ${
-          status === "error" ? "text-red-300" : "text-aurum-bright/90"
+          status === "error" ? "text-red-300" : "text-brand-bright/90"
         }`}
       >
         {message}

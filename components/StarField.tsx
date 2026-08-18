@@ -119,8 +119,8 @@ export default function StarField() {
           const tailY = s.y - Math.sin(s.angle) * s.length;
 
           const gradient = ctx.createLinearGradient(s.x, s.y, tailX, tailY);
-          gradient.addColorStop(0, `rgba(228, 197, 139, ${fade})`);
-          gradient.addColorStop(1, "rgba(228, 197, 139, 0)");
+          gradient.addColorStop(0, `rgba(199, 229, 111, ${fade})`);
+          gradient.addColorStop(1, "rgba(199, 229, 111, 0)");
 
           ctx.beginPath();
           ctx.strokeStyle = gradient;

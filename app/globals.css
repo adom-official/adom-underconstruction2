@@ -9,22 +9,22 @@
 html,
 body {
   height: 100%;
-  background-color: #07060b;
+  background-color: #0a0a0b;
 }
 
 body {
-  color: #f4f1ea;
+  color: #f2f2ef;
   overflow-x: hidden;
 }
 
 ::selection {
-  background-color: rgba(201, 164, 103, 0.35);
-  color: #f4f1ea;
+  background-color: rgba(166, 206, 57, 0.35);
+  color: #f2f2ef;
 }
 
 /* Focus rõ ràng cho điều hướng bằng bàn phím */
 :focus-visible {
-  outline: 2px solid rgba(228, 197, 139, 0.8);
+  outline: 2px solid rgba(166, 206, 57, 0.85);
   outline-offset: 3px;
   border-radius: 2px;
 }
@@ -34,14 +34,14 @@ body {
   width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #07060b;
+  background: #0a0a0b;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(201, 164, 103, 0.35);
+  background: rgba(166, 206, 57, 0.35);
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(201, 164, 103, 0.55);
+  background: rgba(166, 206, 57, 0.55);
 }
 
 @media (prefers-reduced-motion: reduce) {
