@@ -67,24 +67,24 @@ export default function Home() {
               variants={itemVariants}
               className="font-mono text-xs uppercase tracking-widest2 text-brand"
             >
-              Đang kiến tạo
+              Cảm ơn bạn đã ghé thăm
             </motion.span>
 
             <motion.h1
               variants={itemVariants}
               className="mt-6 max-w-3xl font-display text-4xl italic leading-[1.15] text-stardust sm:text-5xl md:text-6xl"
             >
-              Một vũ trụ thương hiệu mới
-              <br className="hidden sm:block" /> đang thành hình.
+              ADOM CREATIVE đang thực hiện nâng cấp website
+              <br className="hidden sm:block" /> và sớm ra mắt trong thời gian tới.
             </motion.h1>
 
             <motion.p
               variants={itemVariants}
               className="mt-6 max-w-xl text-balance font-body text-base leading-relaxed text-stardust-dim sm:text-lg"
             >
-              ADOM đang xây dựng một không gian mới để kể câu chuyện thương
-              hiệu bằng chiến lược và thiết kế. Chúng tôi sẽ sớm trở lại —
-              trọn vẹn và ấn tượng hơn. Hẹn gặp lại bạn sau ít lâu nữa.
+              Chúng tôi đang dành trọn thời gian này để chuẩn bị cho một website mới —
+              nơi câu chuyện thương hiệu được kể bằng chiến lược và hình ảnh một cách chỉn chu nhất.
+              Hẹn gặp lại các bạn!.
             </motion.p>
 
             <motion.div variants={itemVariants} className="mt-10 w-full max-w-md">

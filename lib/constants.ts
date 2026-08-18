@@ -2,11 +2,11 @@
 
 export const siteConfig = {
   name: "ADOM",
-  fullName: "ADOM Brand Studio",
-  legalName: "Công ty TNHH Đầu tư Thương mại HML",
+  fullName: "ADOM Creative",
+  legalName: "Một thương hiệu của Công ty TNHH Đầu tư Thương mại HML",
   url: "https://adom.vn", // TODO: thay bằng domain thật khi deploy
   description:
-    "ADOM là studio tư vấn chiến lược thương hiệu và thiết kế cao cấp dành cho doanh nghiệp SME và khách hàng enterprise. Website mới của chúng tôi sắp ra mắt.",
+    "ADOM Creative là công ty tư vấn chiến lược thương hiệu và thiết kế cao cấp dành cho doanh nghiệp SME và khách hàng Enterprise. Website mới của chúng tôi sắp ra mắt.",
   ogImage: "/og-image.png", // TODO: thêm ảnh OG 1200x630 vào /public
   locale: "vi_VN",
   keywords: [
@@ -21,8 +21,8 @@ export const siteConfig = {
 };
 
 export const contactInfo = {
-  email: "hello@adom.vn", // TODO: thay email thật
-  phone: "+84 (0) 24 0000 0000", // TODO: thay số điện thoại thật
+  email: "creative.adom@gmail.com", // TODO: thay email thật
+  phone: "+84 (0) 985 048 267", // TODO: thay số điện thoại thật
   address: "Hà Nội, Việt Nam", // TODO: thay địa chỉ chi tiết nếu muốn hiển thị
   socials: [
     { label: "Facebook", href: "https://facebook.com/adom" }, // TODO
