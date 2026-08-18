@@ -61,11 +61,6 @@ const config: Config = {
           "0%, 100%": { transform: "translate(0px, 0px)" },
           "50%": { transform: "translate(8px, 12px)" },
         },
-        "sweep": {
-          "0%": { transform: "translate3d(-45vw, -10vh, 0) rotate(18deg)" },
-          "50%": { transform: "translate3d(45vw, 10vh, 0) rotate(18deg)" },
-          "100%": { transform: "translate3d(-45vw, -10vh, 0) rotate(18deg)" },
-        },
       },
       animation: {
         twinkle: "twinkle 4s ease-in-out infinite",
@@ -74,7 +69,6 @@ const config: Config = {
         "float-slow": "float-slow 13s ease-in-out infinite",
         "float-med": "float-med 9s ease-in-out infinite",
         "float-fast": "float-fast 6s ease-in-out infinite",
-        sweep: "sweep 16s ease-in-out infinite",
       },
     },
   },
