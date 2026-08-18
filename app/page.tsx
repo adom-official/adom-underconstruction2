@@ -75,7 +75,8 @@ export default function Home() {
               className="mt-6 max-w-3xl font-display text-4xl italic leading-[1.15] text-stardust sm:text-5xl md:text-6xl"
             >
               ADOM CREATIVE đang thực hiện nâng cấp website
-              <br/> và sớm ra mắt trong thời gian tới.
+              <br/>
+              và sớm ra mắt trong thời gian tới.
             </motion.h1>
 
             <motion.p
@@ -83,8 +84,10 @@ export default function Home() {
               className="mt-6 max-w-xl text-balance font-body text-base leading-relaxed text-stardust-dim sm:text-lg"
             >
               Chúng tôi đang dành trọn thời gian này để chuẩn bị cho một website mới —
-              <br/> nơi câu chuyện thương hiệu được kể bằng chiến lược và hình ảnh một cách chỉn chu nhất.
-              <br/> Hẹn gặp lại các bạn!.
+              <br/>
+              nơi câu chuyện thương hiệu được kể bằng chiến lược và hình ảnh 
+              <br/>
+              một cách chỉn chu nhất. Hẹn gặp lại các bạn!.
             </motion.p>
 
             <motion.div variants={itemVariants} className="mt-10 w-full max-w-md">
