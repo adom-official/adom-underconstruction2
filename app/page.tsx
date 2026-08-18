@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+import BackgroundImage from "@/components/BackgroundImage";
 import StarField from "@/components/StarField";
 import GeometricField from "@/components/GeometricField";
 import WaitlistForm from "@/components/WaitlistForm";
@@ -25,11 +27,12 @@ const itemVariants = {
 export default function Home() {
   return (
     <main className="relative min-h-screen bg-void">
+      <BackgroundImage />
       <StarField />
       <GeometricField />
       <div
         aria-hidden="true"
-        className="pointer-events-none fixed inset-0 z-[2]"
+        className="pointer-events-none fixed inset-0 z-[3]"
         style={{
           background:
             "radial-gradient(ellipse 60% 55% at 50% 46%, rgba(5,4,8,0.7) 0%, rgba(5,4,8,0.35) 45%, transparent 72%)",
@@ -37,19 +40,21 @@ export default function Home() {
       />
 
       <div className="relative z-10 flex min-h-screen flex-col px-6 py-8 sm:px-10 sm:py-10">
-        {/* Header */}
+        {/* Header — logo căn giữa trang */}
         <motion.header
           initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="flex items-center justify-between"
+          className="flex items-center justify-center"
         >
-          <span className="font-display text-xl italic tracking-wide text-stardust sm:text-2xl">
-            {siteConfig.name}
-          </span>
-          <span className="hidden font-mono text-[11px] uppercase tracking-widest2 text-stardust-faint sm:inline">
-            Brand Strategy &amp; Design
-          </span>
+          <Image
+            src="/logo.png"
+            alt={siteConfig.name}
+            width={367}
+            height={121}
+            priority
+            className="h-9 w-auto sm:h-11"
+          />
         </motion.header>
 
         {/* Hero */}
@@ -118,19 +123,9 @@ export default function Home() {
             </span>
           </div>
 
-          <div className="flex items-center justify-center gap-5">
-            {contactInfo.socials.map((social) => (
-              <a
-                key={social.label}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-mono text-xs uppercase tracking-wide text-stardust-faint transition-colors hover:text-brand-bright"
-              >
-                {social.label}
-              </a>
-            ))}
-          </div>
+          <span className="font-mono text-[11px] uppercase tracking-widest2 text-stardust-faint">
+            Brand Strategy &amp; Design
+          </span>
         </motion.footer>
 
         <p className="mt-4 text-center font-mono text-[10px] tracking-wide text-stardust-faint/70 sm:text-left">

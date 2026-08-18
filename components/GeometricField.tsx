@@ -390,6 +390,28 @@ const driftShapes: DriftShape[] = [
   },
 ];
 
+// Tiền cảnh — 1-2 khối siêu to đặt ở góc màn hình, blur rất đậm để không che
+// nội dung, tương tác mạnh nhất với con trỏ (gần nhất, nên di chuyển nhiều nhất).
+const foregroundShapes: Shape[] = [
+  {
+    kind: "circle",
+    size: "clamp(900px, 92vw, 1500px)",
+    style: { top: "-42%", left: "-34%" },
+    gradient: "radial-gradient(circle at 38% 38%, #4A4A4A 0%, #1C1C1C 50%, transparent 76%)",
+    blur: 190,
+    opacity: 0.42,
+  },
+  {
+    kind: "circle",
+    size: "clamp(820px, 84vw, 1360px)",
+    style: { bottom: "-40%", right: "-32%" },
+    gradient:
+      "radial-gradient(circle at 35% 35%, #A6CE39 0%, #3A3A3A 26%, #1C1C1C 55%, transparent 78%)",
+    blur: 180,
+    opacity: 0.36,
+  },
+];
+
 function ShapeEl({ shape }: { shape: Shape }) {
   const base: React.CSSProperties = {
     position: "absolute",
@@ -454,6 +476,9 @@ export default function GeometricField() {
   const midNearY = useTransform(smoothY, [-1, 1], [-36, 36]);
   const nearX = useTransform(smoothX, [-1, 1], [-84, 84]);
   const nearY = useTransform(smoothY, [-1, 1], [-60, 60]);
+  // Tiền cảnh: gần nhất, tương tác mạnh nhất với con trỏ
+  const fgX = useTransform(smoothX, [-1, 1], [-150, 150]);
+  const fgY = useTransform(smoothY, [-1, 1], [-110, 110]);
 
   useEffect(() => {
     if (prefersReducedMotion) return;
@@ -469,7 +494,7 @@ export default function GeometricField() {
     "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E";
 
   return (
-    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1] overflow-hidden">
+    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[2] overflow-hidden">
       <motion.div style={{ x: farX, y: farY }} className="absolute inset-0">
         {farShapes.map((s, i) => (
           <ShapeEl key={`far-${i}`} shape={s} />
@@ -500,6 +525,13 @@ export default function GeometricField() {
           <DriftEl key={`drift-${i}`} shape={s} reduced={!!prefersReducedMotion} />
         ))}
       </div>
+
+      {/* Tiền cảnh — khối siêu to ở góc màn hình, blur đậm, tương tác mạnh nhất */}
+      <motion.div style={{ x: fgX, y: fgY }} className="absolute inset-0">
+        {foregroundShapes.map((s, i) => (
+          <ShapeEl key={`fg-${i}`} shape={s} />
+        ))}
+      </motion.div>
 
       {/* Grain — chất liệu poster in, phủ rất nhẹ */}
       <div
