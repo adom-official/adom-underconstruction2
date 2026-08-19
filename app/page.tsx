@@ -66,15 +66,16 @@ export default function Home() {
               variants={itemVariants}
               className="font-mono text-xs uppercase tracking-widest2 text-brand"
             >
-              Cảm ơn bạn đã ghé thăm
+              Đang kiến tạo
             </motion.span>
 
             <motion.h1
               variants={itemVariants}
               className="mt-6 max-w-3xl font-display text-4xl italic leading-[1.15] text-stardust sm:text-5xl md:text-6xl"
             >
-              ADOM CREATIVE
-              <br /> đang thực hiện nâng cấp website
+              ADOM CREATIVE đang thực hiện
+              <br />
+              nâng cấp website và sớm ra mắt trong thời gian tới
             </motion.h1>
 
             <motion.p
@@ -87,6 +88,8 @@ export default function Home() {
               <br />
               một cách chỉn chu nhất. Hẹn gặp lại các bạn!
             </motion.p>
+
+          </motion.div>
         </div>
 
         {/* Footer / Liên hệ */}
