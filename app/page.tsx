@@ -73,9 +73,9 @@ export default function Home() {
               variants={itemVariants}
               className="mt-6 max-w-3xl font-display text-4xl italic leading-[1.15] text-stardust sm:text-5xl md:text-6xl"
             >
-              ADOM CREATIVE đang thực hiện
+              ADOM CREATIVE 
               <br />
-              nâng cấp website
+              đang thực hiện nâng cấp website
             </motion.h1>
 
             <motion.p
