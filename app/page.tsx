@@ -3,7 +3,6 @@
 import Image from "next/image";
 import StarField from "@/components/StarField";
 import GeometricField from "@/components/GeometricField";
-import WaitlistForm from "@/components/WaitlistForm";
 import { motion } from "framer-motion";
 import { contactInfo, siteConfig } from "@/lib/constants";
 
@@ -88,14 +87,6 @@ export default function Home() {
               <br />
               một cách chỉn chu nhất. Hẹn gặp lại các bạn!
             </motion.p>
-
-            <motion.div variants={itemVariants} className="mt-10 w-full max-w-md">
-              <p className="mb-3 font-mono text-[11px] uppercase tracking-widest2 text-stardust-faint">
-                Nhận thông báo ngay khi ra mắt
-              </p>
-              <WaitlistForm />
-            </motion.div>
-          </motion.div>
         </div>
 
         {/* Footer / Liên hệ */}
