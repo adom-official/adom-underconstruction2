@@ -75,7 +75,7 @@ export default function Home() {
             >
               ADOM CREATIVE đang thực hiện
               <br />
-              nâng cấp website và sớm ra mắt trong thời gian tới
+              nâng cấp website
             </motion.h1>
 
             <motion.p
