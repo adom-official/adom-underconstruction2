@@ -66,7 +66,7 @@ export default function Home() {
               variants={itemVariants}
               className="font-mono text-xs uppercase tracking-widest2 text-brand"
             >
-              Đang kiến tạo
+              Cảm ơn bạn đã ghé thăm
             </motion.span>
 
             <motion.h1
